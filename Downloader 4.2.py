@@ -1,0 +1,125 @@
+import os
+import re
+import requests
+from bs4 import BeautifulSoup
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from rich.console import Console
+from rich.progress import Progress, SpinnerColumn, BarColumn, TimeElapsedColumn
+from urllib.parse import quote
+
+console = Console()
+
+class IMGDownloader:
+    def __init__(self):
+        self.base_url = ""
+        self.num_pages = 0
+        self.folder_path = ""
+
+    def get_user_input(self):
+        console.print("[bold yellow]Enter the base URL for the first page:[/bold yellow]")
+        self.base_url = input("> ").strip()
+
+        console.print("[bold yellow]Enter the number of pages to scrape:[/bold yellow]")
+        try:
+            self.num_pages = int(input("> "))
+        except ValueError:
+            console.print("[bold red]Invalid input. Please enter a valid number of pages![/bold red]")
+            exit()
+
+    def fetch_image_urls(self):
+        image_urls = []
+
+        console.print("\n[bold cyan]Processing...[/bold cyan]\n", style="bold cyan")
+        # Extract the base number (e.g., 3811) using regex
+        match = re.search(r"(\d+)/", self.base_url)
+        if not match:
+            console.print("[bold red]No number found in the URL structure to increment![/bold red]")
+            return []
+        base_number = match.group(1)  # Extract the number (e.g., 3811)
+
+        with Progress(SpinnerColumn(), "[progress.description]{task.description}", TimeElapsedColumn()) as progress:
+            task = progress.add_task("[cyan]Fetching image URLs...", total=self.num_pages)
+            for i in range(self.num_pages):
+                if i == 0:
+                    page_url = self.base_url
+                else:
+                    page_url = re.sub(rf"{base_number}/", f"{base_number}/{i}/", self.base_url)
+
+                try:
+                    headers = {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+                    }
+                    response = requests.get(page_url, headers=headers)
+                    response.raise_for_status()
+                    soup = BeautifulSoup(response.text, "html.parser")
+
+                    for img_tag in soup.find_all("img"):
+                        img_src = img_tag.get("src")
+                        if img_src and img_src.startswith("https://starzone.ragalahari.com/"):
+                            img_src = re.sub(r't(?=\.jpg)', '', img_src)  # Clean URL (optional)
+                            image_urls.append(img_src)
+
+                except requests.exceptions.RequestException as e:
+                    console.print(f"[bold red]Failed to fetch {page_url}: {e}[/bold red]")
+                finally:
+                    progress.update(task, advance=1)
+
+        return image_urls
+
+    def download_images(self, image_urls):
+        console.print("\n[bold green]Starting download process...[/bold green]")
+        if not self.folder_path:
+            console.print("[bold yellow]Enter the folder name to save images (or press Enter for default):[/bold yellow]")
+            folder_choice = input("> ").strip()
+            if not folder_choice:
+                folder_choice = 'downloaded_images'
+            self.folder_path = os.path.join(os.getcwd(), folder_choice)
+
+            if not os.path.exists(self.folder_path):
+                os.makedirs(self.folder_path)
+                console.print(f"[bold green]Created folder:[/bold green] {self.folder_path}")
+
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            futures = [executor.submit(self.download_image, url) for url in image_urls]
+            with Progress(BarColumn(), "[progress.description]{task.description}", TimeElapsedColumn()) as progress:
+                task = progress.add_task("[cyan]Downloading images...", total=len(image_urls))
+                for future in as_completed(futures):
+                    result = future.result()
+                    if "Downloaded:" in result:
+                        progress.update(task, advance=1)
+                    else:
+                        console.print(result, style="bold red")
+
+    def download_image(self, url):
+        try:
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+            encoded_url = quote(url, safe=':/')
+            response = requests.get(encoded_url, headers=headers, timeout=15)
+            response.raise_for_status()
+            filename = os.path.join(self.folder_path, url.split('/')[-1])
+            with open(filename, 'wb') as f:
+                f.write(response.content)
+            return f"Downloaded: {filename}"
+        except requests.exceptions.Timeout:
+            return f"Timeout error: {url}"
+        except requests.exceptions.HTTPError as e:
+            return f"HTTP error {e.response.status_code}: {url}"
+        except requests.exceptions.RequestException as e:
+            return f"Error downloading {url}: {str(e)}"
+
+    def run(self):
+        self.get_user_input()
+        image_urls = self.fetch_image_urls()
+        if not image_urls:
+            console.print("[bold red]No matching images found. Exiting.[/bold red]")
+            return
+
+        console.print(f"[bold green]Found {len(image_urls)} images from starzone.ragalahari.com across {self.num_pages} pages.[/bold green]")
+        self.download_images(image_urls)
+        console.print(f"\n[bold green]Download complete! Images saved in: {self.folder_path}[/bold green]")
+
+if __name__ == "__main__":
+    scraper = IMGDownloader()
+    scraper.run()
