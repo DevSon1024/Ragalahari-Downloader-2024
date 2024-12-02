@@ -58,7 +58,7 @@ pip install requests beautifulsoup4 rich
 
 ### Example Input:
 - **Base URL**: `https://m.ragalahari.com/actress/3811/leader-heroine-richa-gangopadhyay-photo-session-by-ragalaharicom.aspx`
-- **Number of Pages**: `3`
+- **Number of Pages**: `3` (or above minimum `1`)
 
 ### Output:
 - Total images to download: `10`
@@ -75,7 +75,7 @@ pip install requests beautifulsoup4 rich
 
 ```
 ImgDownloader/
-├── img_downloader.py    # Main Python script
+├── Downloader v4.3.py    # Main Python script
 ├── README.md            # Documentation
 ├── requrements.txt      # for installing required version
 ```
