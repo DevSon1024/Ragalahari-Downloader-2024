@@ -6,11 +6,11 @@
 ---
 
 ## Features 🚀
-- **Scrapes Images**: Automatically fetches image URLs from multiple pages based on user input.
-- **Targeted Download**: Only downloads images with specific URL patterns.
-- **Progress Tracking**: Displays a progress bar with file counts and elapsed time.
-- **Multithreaded Downloads**: Uses multiple threads for faster downloading.
-- **Custom Folder**: Allows saving files in a user-specified folder.
+- **Multi-Page Scraping**: Download images from multiple pages in one run.  
+- **Custom Directory Names**: Save downloaded images in directories with custom names, prefixed by their source directory number.
+- **Efficient Downloading**: Uses multithreading for faster image downloads.  
+-- **User-Friendly Interface**: Progress bars and feedback are displayed using the `rich` library. 
+- **Error Handling**: Handles timeouts and HTTP errors gracefully, providing clear messages.  
 
 ---
 
@@ -35,17 +35,23 @@ pip install requests beautifulsoup4 rich
 1. Clone or download this repository:
    ```bash
    git clone https://github.com/Dev9078/Ragalahari-Downloader-2024.git
+   cd Ragalahari-Downloader-2024
+   ```
+   
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
    ```
 
-2. Run the script:
+3. Run the script:
    ```bash
-   python Downloader v4.3.py
+   python Ragalahari_Downloader_v4.4.py
    ```
 
 3. Follow the prompts:
    - Enter the **base URL** of the page you want to Download from `Ragalahari.com`.
    - Enter the **number of pages** to scrape for images.
-   - Specify a folder name (or leave blank for default `downloaded_images`).
+   - Custom folder name for saving the images.(e.g.: Richa)
 
 4. The program will:
    - Display the number of images to download.
@@ -59,25 +65,35 @@ pip install requests beautifulsoup4 rich
 ### Example Input:
 - **Base URL**: `https://m.ragalahari.com/actress/3811/leader-heroine-richa-gangopadhyay-photo-session-by-ragalaharicom.aspx`
 - **Number of Pages**: `3` (or above minimum `1`)
-
+- 
+- **Custom folder name**: `Richa`
 ### Output:
-- Total images to download: `10`
-- Folder: `downloaded_images/`
-
-**Downloaded Images**:
-- `https://starzone.ragalahari.com/image1.jpg`
-- `https://starzone.ragalahari.com/image2.jpg`
-- ...
+```
+|-- Ragalahari Downloads/
+    |-- 3811-Richa/
+        |-- image1.jpg
+        |-- image2.jpg
+        ...
+```
 
 ---
 
 ## File Structure 📂
 
+When running the script, the following folder structure is created:
+
 ```
-ImgDownloader/
-├── Downloader v4.3.py    # Main Python script
-├── README.md            # Documentation
-├── requrements.txt      # for installing required version
+Ragalahari Downloader/
+│
+├── Ragalahari Downloads/
+│   ├── 123-Tamannah/
+│   │   ├── image1.jpg
+│   │   ├── image2.jpg
+│   │   └── ...
+│   └── ...
+├── ragalahari_downloader.py
+├── README.md
+└── requirements.txt
 ```
 
 ---
