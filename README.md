@@ -117,6 +117,7 @@ Contributions are welcome! Please feel free to submit a Pull Request or open an 
 
 ## Contact 📧
 For any queries, feel free to reach out:
+- **Name**: Devendra Sonawane
 - **Email**: [Mail me](mailto:dpsonawane789@gmail.com)
 - **GitHub**: [Devson](https://github.com/Dev9078)
 
