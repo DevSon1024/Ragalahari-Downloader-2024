@@ -45,7 +45,7 @@ pip install requests beautifulsoup4 rich
 
 3. Run the script:
    ```bash
-   python Ragalahari_Downloader_v4.4.py
+   python Ragalahari_Downloader_v4.6.py
    ```
 
 3. Follow the prompts:
