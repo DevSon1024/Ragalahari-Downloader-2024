@@ -34,7 +34,7 @@ pip install requests beautifulsoup4 rich
 
 1. Clone or download this repository:
    ```bash
-   git clone https://github.com/Dev9078/Ragalahari-Downloader-2024.git
+   git clone https://github.com/DevSon1024/Ragalahari-Downloader-2024.git
    cd Ragalahari-Downloader-2024
    ```
    
@@ -119,5 +119,5 @@ Contributions are welcome! Please feel free to submit a Pull Request or open an 
 For any queries, feel free to reach out:
 - **Name**: Devendra Sonawane
 - **Email**: [Mail me](mailto:dpsonawane789@gmail.com)
-- **GitHub**: [Devson](https://github.com/Dev9078)
+- **GitHub**: [Devson](https://github.com/DevSon1024)
 
