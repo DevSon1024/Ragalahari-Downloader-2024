@@ -1,7 +1,7 @@
 
 # Ragalahari-Downloader 🖼️
 
-**Ragalahari-Downloader** is a Python-based program to scrape and download images from a series of pages on a ragalahari website. It specifically targets image URLs that match a specific pattern and downloads them into a local folder. The program supports multithreading for efficient downloading and provides a user-friendly interface with progress tracking. it is build in 'Python 3.12.5' still It can be run in python 3.7 or Higher.
+**Ragalahari-Downloader** is a Python-based program to scrape and download images from a series of pages on a ragalahari website. It specifically targets image URLs that match a specific pattern and downloads them into a local folder. The program supports multithreading for efficient downloading and provides a user-friendly interface with progress tracking. it is build in 'Python 3.12.5' still It can be run in python 3.7 or Higher. Also Works in Pydroid3 for Android...
 
 ---
 
